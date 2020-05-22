@@ -15,3 +15,16 @@ public func <-> (lhs: RealmTransaction, rhs: RealmTransaction) -> RealmTransacti
         rhs.transaction(realm)
     }
 }
+
+
+precedencegroup PipeForwardApplication {
+    associativity: left
+    higherThan: AssignmentPrecedence
+}
+
+
+infix operator |>: PipeForwardApplication
+
+public func |> <B>(transaction: RealmTransaction, f: (RealmTransaction) -> B) -> B {
+    f(transaction)
+}
