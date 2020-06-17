@@ -101,6 +101,11 @@ public struct RealmTransaction {
         }
     }
     
+    
+    ///Returns a `RealmTransaction` that does nothing
+    public static var empty: RealmTransaction {
+        .init(f: {})
+    }
 }
 
 
