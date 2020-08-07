@@ -3,9 +3,12 @@ import RealmSwift
 
 
 public struct RealmTransaction {
-   
+
     public let transaction: (Realm) -> ()
-    
+
+    fileprivate let uuid: UUID = UUID()
+
+
     public init(transaction: @escaping (Realm) -> ()) {
         self.transaction = transaction
     }
@@ -106,8 +109,16 @@ public struct RealmTransaction {
     public static var empty: RealmTransaction {
         .init(f: {})
     }
+
 }
 
+
+extension RealmTransaction: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.uuid == rhs.uuid
+    }
+
+}
 
 
 extension Array where Element == RealmTransaction {
