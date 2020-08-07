@@ -86,3 +86,26 @@ public static func delete<S>(_ objects: S) -> RealmTransaction where S: Sequence
 let transaction = object.set(\.name, "luke")
 ```
 
+
+# Composable Realm
+This package provides handy extensions on top of [composable architecture](https://github.com/pointfreeco/swift-composable-architecture)
+
+You can easily extend a `Reducer` to handle all Realm Database transactions with 
+
+```swift
+
+public enum RealmAction {
+
+    case commit(RealmTransaction)
+    case saveObject(Object)
+    case deleteObject(Object)
+    case deleteObjects([Object])
+
+}
+
+static func realmReducer(
+    action toGlobalAction: CasePath<Action, RealmAction>,
+    realm toRealm: @escaping (Environment) -> Realm
+) -> Reducer<State, Action, Environment>
+
+```
