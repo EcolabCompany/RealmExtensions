@@ -66,6 +66,17 @@ public struct RealmTransaction {
             }
         }
     }
+
+
+    public static func create<T: Object>(_ type: T.Type) -> (Any) -> RealmTransaction {
+        { value in
+            .init { realm in
+                realm.chainWrite {
+                    realm.create(type, value: value, update: .modified)
+                }
+            }
+        }
+    }
     
     
     public static func delete(_ object: Object) -> RealmTransaction {
