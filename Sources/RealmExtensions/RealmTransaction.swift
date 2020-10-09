@@ -1,12 +1,36 @@
 import Foundation
 import RealmSwift
 
+public var SideEffects = RealmTransactionEnvironment.live()
+
+/// A way to control side effects. Handy for testing
+public struct RealmTransactionEnvironment {
+    var uuid: () -> UUID
+}
+
+extension RealmTransactionEnvironment {
+
+    internal static func live() -> Self {
+        .init(uuid: UUID.init)
+    }
+
+
+    /// Used only for testing.
+    /// Over rides UUID generationg to easily tell if `RealmTransaction` objects are equal
+    public static func mock(
+        uuid: @escaping () -> UUID = { UUID.init(uuidString: "00000000-0000-0000-0000-000000000000")! }
+    ) -> RealmTransactionEnvironment {
+        .init(uuid: uuid)
+    }
+
+}
+
 
 public struct RealmTransaction {
 
     public let transaction: (Realm) -> ()
 
-    fileprivate let uuid: UUID = UUID()
+    fileprivate let uuid: UUID = SideEffects.uuid()
 
 
     public init(transaction: @escaping (Realm) -> ()) {
