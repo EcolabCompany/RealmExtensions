@@ -98,7 +98,8 @@ class Hero: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var title: String = ""
     @objc dynamic var weapon: String = ""
-    
+    @objc dynamic var ship: Ship? = nil
+    let villans = List<Villan>()
     
     override class func primaryKey() -> String? {
         return "name"
@@ -107,12 +108,46 @@ class Hero: Object {
     convenience init(
         name: String,
         title: String,
-        weapon: String
+        weapon: String,
+        ship: Ship? = nil
     ) {
         self.init()
         self.name = name
         self.title = title
         self.weapon = weapon
+        self.ship = ship
     }
 }
 
+
+class Villan: Object {
+
+    @objc dynamic var name: String = ""
+    @objc dynamic var weapon: String = ""
+    @objc dynamic var ship: Ship? = nil
+
+    override class func primaryKey() -> String? {
+        return "name"
+    }
+
+    convenience init(
+        name: String,
+        weapon: String,
+        ship: Ship? = nil
+    ) {
+        self.init()
+        self.name = name
+        self.weapon = weapon
+        self.ship = ship
+    }
+}
+
+
+class Ship: Object {
+    @objc dynamic var name: String = ""
+
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+    }
+}
