@@ -57,14 +57,40 @@ class RealmTransactionTests: RealmTestCase {
         XCTAssertEqual(realm.objects(Hero.self).count, 1)
         XCTAssertEqual(realm.objects(Hero.self).first!, luke)
     }
-    
-    
+
+
+    func test_delete_invalidated() {
+        RealmTransaction.add([luke, han]).write(in: realm)
+        try! realm.write {
+            realm.delete(han)
+        }
+
+        RealmTransaction.delete(han).write(in: realm)
+        XCTAssertEqual(realm.objects(Hero.self).count, 1)
+        XCTAssertEqual(realm.objects(Hero.self).first!, luke)
+    }
+
+
     func test_delete_multiple() {
         RealmTransaction.add([luke, han, leia]).write(in: realm)
         
         let transaction = RealmTransaction.delete([han, leia])
         transaction.write(in: realm)
         
+        XCTAssertEqual(realm.objects(Hero.self).count, 1)
+        XCTAssertEqual(realm.objects(Hero.self).first!, luke)
+    }
+
+
+    func test_delete_multiple_invalidate() {
+        RealmTransaction.add([luke, han, leia]).write(in: realm)
+        try! realm.write {
+            realm.delete(han)
+        }
+        
+        let transaction = RealmTransaction.delete([han, leia])
+        transaction.write(in: realm)
+
         XCTAssertEqual(realm.objects(Hero.self).count, 1)
         XCTAssertEqual(realm.objects(Hero.self).first!, luke)
     }
