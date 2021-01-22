@@ -104,8 +104,8 @@ public struct RealmTransaction {
     
     
     public static func delete(_ object: Object) -> RealmTransaction {
-        guard !object.isInvalidated else { return .empty }
         return .init { realm in
+            guard object.realm != nil, !object.isInvalidated else { return }
             realm.chainWrite {
                 realm.delete(object)
             }
@@ -114,8 +114,9 @@ public struct RealmTransaction {
     
     
     public static func delete(_ object: Object?) -> RealmTransaction {
-        guard let object = object, !object.isInvalidated else { return .empty }
+        guard let object = object else { return .empty }
         return .init { realm in
+            guard object.realm != nil, !object.isInvalidated else { return }
             realm.chainWrite {
                 realm.delete(object)
             }
@@ -124,8 +125,8 @@ public struct RealmTransaction {
     
     
     public static func delete<S>(_ objects: S) -> RealmTransaction where S: Sequence, S.Element: Object {
-        let validObjects = objects.filter({ $0.isInvalidated == false })
-        return .init { realm in
+        .init { realm in
+            let validObjects = objects.filter({ $0.isInvalidated == false && $0.realm != nil })
             realm.chainWrite {
                 realm.delete(validObjects)
             }
