@@ -114,6 +114,23 @@ class RealmTransactionTests: RealmTestCase {
         
         XCTAssertEqual(leia.title, "general")
     }
+
+
+    // this tests insures that if an object deleted twice for some reason, an error does not occur
+    func test_multiple_duplicate_deletes() {
+        try! realm.write({
+            realm.add(luke, update: .all)
+            realm.add(han, update: .all)
+            realm.add(leia, update: .all)
+        })
+
+        let transaction = RealmTransaction.delete(luke)
+            <-> .delete(han)
+            <-> .delete(leia)
+            <-> .delete(luke)
+
+        transaction.write(in: realm)
+    }
     
 }
 
