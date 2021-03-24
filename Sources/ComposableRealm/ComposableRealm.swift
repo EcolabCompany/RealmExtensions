@@ -8,7 +8,7 @@ import RealmSwift
 public extension Reducer {
 
     /// Enhances a `Reducer` with the ability to commit `RealmTransaction` objects
-    @available(*, depricated, message: "Please use write(_ transaction:) instead")
+    @available(*, deprecated, message: "Please use write(_ transaction:) instead")
     static func realmReducer(
         action toGlobalAction: CasePath<Action, RealmTransaction>,
         realm toRealm: @escaping (Environment) -> Realm
