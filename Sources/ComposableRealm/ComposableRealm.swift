@@ -28,7 +28,7 @@ public extension Reducer {
 
 extension Realm {
 
-    func write(_ transaction: RealmTransaction) -> Effect<Never, Never> {
+    public func write(_ transaction: RealmTransaction) -> Effect<Never, Never> {
         .fireAndForget {
             transaction.write(in: self)
         }
