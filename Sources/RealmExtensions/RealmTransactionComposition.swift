@@ -11,7 +11,7 @@ infix operator <->: RealmTransactionComposition
 
 public func <-> (lhs: RealmTransaction, rhs: RealmTransaction) -> RealmTransaction {
     RealmTransaction.init { realm in
-        lhs.transaction(realm)
-        rhs.transaction(realm)
+      try lhs.transaction(realm)
+      try rhs.transaction(realm)
     }
 }

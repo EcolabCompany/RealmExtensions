@@ -2,30 +2,21 @@
   "object": {
     "pins": [
       {
-        "package": "combine-schedulers",
-        "repositoryURL": "https://github.com/pointfreeco/combine-schedulers",
+        "package": "RealmDatabase",
+        "repositoryURL": "https://github.com/realm/realm-core",
         "state": {
           "branch": null,
-          "revision": "ff42ec9061d864de7982162011321d3df5080c10",
-          "version": "0.1.2"
+          "revision": "2b8def17bb8e0cddbcc754db6b6466b8487feebf",
+          "version": "12.5.0"
         }
       },
       {
-        "package": "swift-case-paths",
-        "repositoryURL": "https://github.com/pointfreeco/swift-case-paths",
+        "package": "Realm",
+        "repositoryURL": "https://github.com/realm/realm-swift.git",
         "state": {
           "branch": null,
-          "revision": "ed1838ab4fa5d47db8aa640736dd5b7672548873",
-          "version": "0.1.2"
-        }
-      },
-      {
-        "package": "swift-composable-architecture",
-        "repositoryURL": "https://github.com/pointfreeco/swift-composable-architecture",
-        "state": {
-          "branch": null,
-          "revision": "b67569f69813140cd9c984db33ee959d9711a008",
-          "version": "0.9.0"
+          "revision": "a107f5660b0b6067700923af7f107b6af73c546b",
+          "version": "10.28.5"
         }
       }
     ]
