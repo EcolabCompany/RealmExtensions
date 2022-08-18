@@ -3,10 +3,10 @@ import RealmSwift
 
 
 extension ObjectChange {
-
-    public var objectChanged: T? {
-        guard case .change(let object, _) = self else { return nil }
-        return object
-    }
-
+  
+  public var objectChanged: T? {
+    guard case .change(let object, _) = self else { return nil }
+    return object
+  }
+  
 }
