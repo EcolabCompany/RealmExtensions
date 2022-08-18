@@ -27,75 +27,65 @@ extension RealmTransactionEnvironment {
 
 
 public struct RealmTransaction {
-  
-  public let transaction: (Realm) throws -> ()
+  public let transaction: (Realm) -> ()
   
   fileprivate let uuid: UUID = SideEffects.uuid()
   
-  
-  public init(transaction: @escaping (Realm) throws -> ()) {
+  public init(transaction: @escaping (Realm) -> ()) {
     self.transaction = transaction
   }
   
-  
   public init(f: @escaping () -> ()) {
     self.transaction = { realm in
-      try realm.chainWrite(f)
+      realm.chainWrite(f)
     }
   }
   
-  
   public static func write(in realm: Realm = try! Realm()) -> (RealmTransaction) throws -> () {
-    { try $0.transaction(realm) }
+    { $0.transaction(realm) }
   }
   
-  
-  public func write(in realm: Realm = try! Realm()) throws {
-    try transaction(realm)
+  public func write(in realm: Realm = try! Realm()) {
+    transaction(realm)
   }
-  
   
   public static func add(_ object: Object) -> RealmTransaction {
     .init { realm in
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.add(object, update: .modified)
       }
     }
   }
-  
   
   public static func add(_ object: Object?) -> RealmTransaction {
     .init { realm in
       guard let object = object else { return }
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.add(object, update: .modified)
       }
     }
   }
   
-  
   public static func add<S>(_ objects: S) -> RealmTransaction where S: Sequence, S.Element: Object {
     .init { realm in
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.add(objects, update: .modified)
       }
     }
   }
   
-  
   public static func create<T: Object>(_ type: T.Type, value: Any) -> RealmTransaction {
     .init { realm in
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.create(type, value: value, update: .modified)
       }
     }
   }
   
-  
   public static func create<T: Object>(_ type: T.Type) -> (Any) -> RealmTransaction {
     { value in
         .init { realm in
-          try realm.chainWrite {
+          realm.chainWrite {
             realm.create(type, value: value, update: .modified)
           }
         }
@@ -106,38 +96,35 @@ public struct RealmTransaction {
   public static func delete(_ object: Object) -> RealmTransaction {
     return .init { realm in
       guard object.realm != nil, !object.isInvalidated else { return }
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.delete(object)
       }
     }
   }
-  
   
   public static func delete(_ object: Object?) -> RealmTransaction {
     guard let object = object else { return .empty }
     return .init { realm in
       guard object.realm != nil, !object.isInvalidated else { return }
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.delete(object)
       }
     }
   }
   
-  
   public static func delete<S>(_ objects: S) -> RealmTransaction where S: Sequence, S.Element: Object {
     .init { realm in
       let validObjects = objects.filter({ $0.isInvalidated == false && $0.realm != nil })
-      try realm.chainWrite {
+      realm.chainWrite {
         realm.delete(validObjects)
       }
     }
   }
   
-  
   public func refresh() -> RealmTransaction {
     .init { realm in
       realm.refresh()
-      try self.transaction(realm)
+      self.transaction(realm)
     }
   }
   
@@ -176,7 +163,7 @@ extension RealmTransactionPropertySettable where Self: Object {
   /// Sets an `Object`'s property through a keyPath
   public func set<Value>(_ keyPath: ReferenceWritableKeyPath<Self, Value>, _ value: Value) -> RealmTransaction {
     .init { realm in
-      try realm.chainWrite {
+      realm.chainWrite {
         self[keyPath: keyPath] = value
       }
     }
